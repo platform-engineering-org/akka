@@ -9,6 +9,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    'events.apps.EventsConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -29,7 +30,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'akka.urls'
 
-TEMPLATE_DIR = Path(BASE_DIR, 'akka/templates')
+TEMPLATE_DIR = Path(BASE_DIR, 'events/templates')
 
 TEMPLATES = [
     {
