@@ -1,0 +1,20 @@
+{% block title %}
+All Events
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            {% for data in form %}
+            <p>
+            <h3>Date: {{data.date}}</h3>
+            <h3>Description: {{data.description}}</h3>
+            </p>
+            </br>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
