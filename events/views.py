@@ -10,7 +10,7 @@ def event(request):
         form = EventForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/events/thanks')
+            return HttpResponseRedirect('/events/events')
     else:
         form = EventForm()
 
