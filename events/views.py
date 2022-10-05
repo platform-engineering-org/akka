@@ -6,21 +6,21 @@ from .models import Event
 
 
 def event(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         form = EventForm(request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/events/events')
+            return HttpResponseRedirect("/events/events")
     else:
         form = EventForm()
 
-    return render(request, 'events/event.html', {'form': form})
+    return render(request, "events/event.html", {"form": form})
 
 
 def events(request):
     form = Event.objects.all()
-    context = {'form': form}
-    return render(request, 'events/events.html', context)
+    context = {"form": form}
+    return render(request, "events/events.html", context)
 
 
 def thanks(request):
