@@ -1,5 +1,3 @@
-from tkinter.tix import MAX
-
 from django.db import models
 
 
