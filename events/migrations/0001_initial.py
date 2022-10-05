@@ -14,9 +14,11 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Event',
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('id', models.BigAutoField(auto_created=True,
+                 primary_key=True, serialize=False, verbose_name='ID')),
                 ('date', models.DateField()),
-                ('specialty', models.CharField(choices=[('Orthopedics', 'Ortho'), ('Family', 'Family')], default='Family', max_length=11)),
+                ('specialty', models.CharField(choices=[
+                 ('Orthopedics', 'Ortho'), ('Family', 'Family')], default='Family', max_length=11)),  # noqa
                 ('description', models.CharField(max_length=100)),
             ],
         ),
