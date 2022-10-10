@@ -1,11 +1,11 @@
 from datetime import date
 
-from django.forms import ModelForm, widgets
+from django import forms
 
 from .models import Event
 
 
-class EventForm(ModelForm):
+class EventForm(forms.ModelForm):
     class Meta:
         model = Event
         fields = "__all__"
@@ -15,7 +15,7 @@ class EventForm(ModelForm):
             "description": "Description",
         }
         widgets = {
-            "date": widgets.DateInput(
+            "date": forms.widgets.DateInput(
                 format="%d-%m-%Y",
                 attrs={
                     "type": "date",
@@ -24,3 +24,10 @@ class EventForm(ModelForm):
                 },
             )
         }
+
+
+class EventsForm(forms.Form):
+    events = forms.ModelMultipleChoiceField(
+        queryset=Event.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+    )

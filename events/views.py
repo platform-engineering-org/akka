@@ -1,8 +1,7 @@
 from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
-from .forms import EventForm
-from .models import Event
+from .forms import EventForm, EventsForm
 
 
 def event(request):
@@ -18,9 +17,8 @@ def event(request):
 
 
 def events(request):
-    form = Event.objects.all()
-    context = {"form": form}
-    return render(request, "events/events.html", context)
+    context = {"form": EventsForm()}
+    return render(request, "events/events.html", context=context)
 
 
 def thanks(request):
