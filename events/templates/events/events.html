@@ -6,14 +6,7 @@ All Events
 <div class="container">
     <div class="row">
         <div class="col-md-12">
-            {% for data in form %}
-            <p>
-            <h3>Date: {{data.date}}</h3>
-            <h3>Specialty: {{data.specialty}}</h3>
-            <h3>Description: {{data.description}}</h3>
-            </p>
-            </br>
-            {% endfor %}
+            {{form.as_p}}
         </div>
     </div>
 </div>

@@ -16,3 +16,9 @@ class Event(models.Model):
 
     class Meta:
         app_label = "events"
+
+    def __str__(self):
+        return (
+            f"ID: {self.id}, Date {self.date}, Speciality {self.specialty}, "
+            f"Description {self.description}"
+        )
