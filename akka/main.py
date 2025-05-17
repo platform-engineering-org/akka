@@ -1,10 +1,12 @@
-from flask import Flask, render_template
 import configparser
+
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 @app.route('/')
 def show_environments():
+    """Show Environments Page"""
     config = configparser.ConfigParser()
     config.read('environments.cfg')
     environments = []
@@ -15,4 +17,4 @@ def show_environments():
     return render_template('environments.html', environments=environments)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000)
