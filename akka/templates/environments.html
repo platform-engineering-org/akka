@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Environments</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 60%;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <h2>Environments</h2>
+    <table>
+        <tr>
+            <th>Environment</th>
+            <th>DEBUG</th>
+            <th>DATABASE_URI</th>
+        </tr>
+        {% for env in environments %}
+        <tr>
+            <td>{{ env.name }}</td>
+            <td>{{ env.debug }}</td>
+            <td>{{ env.database_uri }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</body>
+</html>
