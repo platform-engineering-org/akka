@@ -21,14 +21,14 @@
     <table>
         <tr>
             <th>Environment</th>
-            <th>DEBUG</th>
-            <th>DATABASE_URI</th>
+            <th>GITLAB_GROUP_ID</th>
+            <th>TAGS_LIST</th>
         </tr>
         {% for env in environments %}
         <tr>
             <td>{{ env.name }}</td>
-            <td>{{ env.debug }}</td>
-            <td>{{ env.database_uri }}</td>
+            <td>{{ env.gitlab_group_id }}</td>
+            <td>{{ env.tags_list }}</td>
         </tr>
         {% endfor %}
     </table>
