@@ -1,1 +1,25 @@
-__pycache__/*
+# Terraform Core Files & Directories
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+*.tfplan
+
+# Terraform Variables
+# Ignore all .tfvars files by default as they often contain sensitive information.
+*.tfvars
+*.tfvars.json
+
+# Allow example tfvars files to be committed.
+!*.tfvars.example
+!*.tfvars.json.example
+
+# Terraform Override Files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform CLI configuration files
+.terraformrc
+terraform.rc
