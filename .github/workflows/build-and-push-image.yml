@@ -28,3 +28,24 @@ jobs:
         with:
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'platform-engineering-org/akka' }}
           tags: ghcr.io/${{ github.repository_owner }}/akka:latest
+
+      - name: Scan image for vulnerabilities
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: ghcr.io/${{ github.repository_owner }}/akka:latest
+          format: table
+          output: trivy-results.txt
+          exit-code: 0
+          ignore-unfixed: false
+          severity: CRITICAL,HIGH
+
+      - name: Post Trivy scan result as PR comment
+        uses: peter-evans/create-or-update-comment@v4.0.0
+        if: github.event_name == 'push'
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          body: |
+            ### 🔒 Trivy Scan Results for `ghcr.io/${{ github.repository_owner }}/akka:latest`
+            ```
+            ${{ steps.trivy-scan.outputs.stdout }}
+            ```
