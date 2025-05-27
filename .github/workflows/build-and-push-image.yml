@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+  pull_request_target:
   push:
     branches:
       - main
@@ -40,8 +41,8 @@ jobs:
           severity: CRITICAL,HIGH
 
       - name: Post Trivy scan result as PR comment
+        if: github.event_name == 'pull_request_target'
         uses: peter-evans/create-or-update-comment@v4.0.0
-        if: github.event_name == 'push'
         with:
           issue-number: ${{ github.event.pull_request.number }}
           body: |
