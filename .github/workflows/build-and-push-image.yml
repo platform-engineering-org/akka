@@ -31,6 +31,7 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/akka:latest
 
       - name: Scan image for vulnerabilities
+        if: github.event_name == 'pull_request_target'
         uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: ghcr.io/${{ github.repository_owner }}/akka:latest
@@ -40,6 +41,28 @@ jobs:
           ignore-unfixed: false
           severity: CRITICAL,HIGH
 
+      - name: Upload scan result artifact
+        if: github.event_name == 'pull_request_target'
+        uses: actions/upload-artifact@4.6.2
+        with:
+          name: scan-results
+          path: trivy-results.txt
+
+      - name: Download scan result artifact
+        if: github.event_name == 'pull_request_target'
+        uses: actions/download-artifact@4.3.0
+        with:
+          name: scan-results
+          path: .
+
+      - name: Read scan results into output
+        if: github.event_name == 'pull_request_target'
+        id: read-scan
+        run: |
+          echo "scan_output<<EOF" >> $GITHUB_OUTPUT
+          cat trivy-results.txt >> $GITHUB_OUTPUT
+          echo "EOF" >> $GITHUB_OUTPUT
+
       - name: Post Trivy scan result as PR comment
         if: github.event_name == 'pull_request_target'
         uses: peter-evans/create-or-update-comment@v4.0.0
@@ -48,5 +71,5 @@ jobs:
           body: |
             ### 🔒 Trivy Scan Results for `ghcr.io/${{ github.repository_owner }}/akka:latest`
             ```
-            ${{ steps.trivy-scan.outputs.stdout }}
+            ${{ steps.read-scan.outputs.scan_output }}
             ```
