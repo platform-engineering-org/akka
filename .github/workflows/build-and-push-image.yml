@@ -31,6 +31,7 @@ jobs:
           tags: ghcr.io/${{ github.repository_owner }}/akka:latest
 
       - name: Scan image for vulnerabilities
+        if: github.event_name == 'pull_request_target'
         uses: aquasecurity/trivy-action@0.30.0
         with:
           image-ref: ghcr.io/${{ github.repository_owner }}/akka:latest
