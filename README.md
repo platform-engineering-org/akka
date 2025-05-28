@@ -11,10 +11,7 @@ This project contains a sample Akka application, along with configurations for l
 1.  Build the container image (or pull the pre-built one):
     ```bash
     # To build locally (optional)
-    # docker build -t akka-app .
-    
-    # To pull the pre-built image
-    docker pull ghcr.io/platform-engineering-org/akka:latest
+    docker build -t ghcr.io/platform-engineering-org/akka:latest .
     ```
 2.  Run the application using the public image:
     ```bash
@@ -99,7 +96,7 @@ This section outlines deploying the Akka application to an OpenShift cluster usi
 
 ### Prerequisites
 - OpenShift CLI (`oc`) installed and configured to connect to your cluster.
-- The image `ghcr.io/platform-engineering-org/akka:latest` should be accessible by your OpenShift cluster. 
+- The image `ghcr.io/platform-engineering-org/akka:latest` should be accessible by your OpenShift cluster.
 
 ### Preparing the Deployment File
 - The provided `deployment/openshift-deployment.yaml` serves as a starting point. It is pre-configured to use `image: ghcr.io/platform-engineering-org/akka:latest`.

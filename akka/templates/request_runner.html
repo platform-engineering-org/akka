@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Request GitLab Runner</title>
+</head>
+<body>
+    <h1>Request a New GitLab Runner</h1>
+    <form method="POST">
+        <label for="environment">Environment Name:</label><br>
+        <input type="text" id="environment" name="environment" required><br><br>
+
+        <label for="project_group">GitLab Project Group:</label><br>
+        <input type="text" id="project_group" name="project_group" required><br><br>
+
+        <label for="tags">Tags (comma-separated):</label><br>
+        <input type="text" id="tags" name="tags"><br><br>
+
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>
