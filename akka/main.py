@@ -1,8 +1,11 @@
 import configparser
 
 from flask import Flask, render_template, request, redirect, url_for
+import request
+from flask_wtf.csrf import CSRFProtect
 
 app = Flask(__name__)
+app.config['WTF_CSRF_ENABLED'] = False
 
 
 @app.route("/")
@@ -20,18 +23,19 @@ def show_environments():
 
 @app.route("/request-runner", methods=["GET", "POST"])
 def request_runner():
-    if request.method == "POST":
-        environment = request.form["environment"]
-        project_group = request.form["project_group"]
-        tags = request.form["tags"]
+    form = request.RequestForm()
+    if form.validate_on_submit():
+        environment_name = form.environment_name.data
+        project_group = form.project_group.data
+        tags = form.tags.data
 
         print(
-            f"Requested GitLab Runner - Environment: {environment}, Group: {project_group}, Tags: {tags}"
+            f"Requested GitLab Runner - Environment: {environment_name}, Group: {project_group}, Tags: {tags}"
         )
 
         return redirect(url_for("success"))
 
-    return render_template("request_runner.html")
+    return render_template("request_runner.html", form=form)
 
 
 @app.route("/success")
