@@ -40,6 +40,8 @@ jobs:
             akka:pr-${{ github.event.pull_request.number }}
           platforms: linux/amd64,linux/arm64/v8
 
+      - run: docker images
+
       - name: Scan image for vulnerabilities
         if: github.event_name == 'pull_request_target'
         uses: aquasecurity/trivy-action@0.30.0
