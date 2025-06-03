@@ -49,8 +49,6 @@ jobs:
           tags: akka:pr-${{ github.event.pull_request.number }}
           platforms: linux/amd64
 
-      - run: docker images
-
       - name: Scan image for vulnerabilities
         if: github.event_name == 'pull_request_target'
         uses: aquasecurity/trivy-action@0.30.0
@@ -84,7 +82,7 @@ jobs:
         uses: peter-evans/create-or-update-comment@v4.0.0
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          comment-id: ${{ steps.get-comment.outputs.comment-id }}
           edit-mode: replace
           body: |
             ### 🔒 Trivy Scan Results for `akka:pr-${{ github.event.pull_request.number }}`
