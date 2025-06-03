@@ -70,13 +70,21 @@ jobs:
           cat trivy-results.txt >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Get comment ID
+        if: github.event_name == 'pull_request_target'
+        id: get-comment
+        uses: peter-evans/find-comment@v3.1.0
+        with:
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-author: 'github-actions[bot]'
+          body-includes: '### 🔒 Trivy Scan Results for `akka:pr-${{ github.event.pull_request.number }}`'
+
       - name: Post Trivy scan result as PR comment
         if: github.event_name == 'pull_request_target'
         uses: peter-evans/create-or-update-comment@v4.0.0
         with:
           issue-number: ${{ github.event.pull_request.number }}
-          comment-author: 'github-actions[bot]'
-          body-includes: '### 🔒 Trivy Scan Results for `akka:pr-${{ github.event.pull_request.number }}`'
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
           edit-mode: replace
           body: |
             ### 🔒 Trivy Scan Results for `akka:pr-${{ github.event.pull_request.number }}`
