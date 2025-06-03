@@ -14,6 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+
+      - name: Checkout code
+        uses: actions/checkout@4.0.0
+
       - name: Login to GitHub Container Registry
         uses: docker/login-action@3.4.0
         with:
