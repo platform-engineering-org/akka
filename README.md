@@ -4,11 +4,15 @@ This project contains a sample Akka application, along with configurations for l
 
 ## Local Development & Execution
 
-### Prerequisites
-
-- Docker installed
-
 ### Build & Run Locally
+
+#### Docker
+
+##### Prerequisites
+
+- docker installed
+
+##### Instructions
 
 1. Build the container image (or pull the pre-built one):
 
@@ -24,6 +28,41 @@ This project contains a sample Akka application, along with configurations for l
     ```
 
 3. Access the application at `http://127.0.0.1:5000`.
+
+#### Kind
+
+##### Prerequisites
+
+- kind installed
+- kubectl installed
+
+##### Instructions
+
+1. Build the container image:
+
+    ```bash
+    docker build -t ghcr.io/platform-engineering-org/akka:latest .
+    ```
+
+2. Create cluster
+
+    ```bash
+    kind create cluster
+    ```
+
+3. Deploy the application:
+
+    ```bash
+    kubectl apply -f deployment/kind.yml
+    ```
+
+4. Port forwarding
+
+    ```bash
+    kubectl port-forward service/akka-app-service 5000:5000
+    ```
+
+5. Access the application at `http://127.0.0.1:5000`.
 
 ## AWS ECS Fargate Deployment (via OpenTofu)
 
