@@ -8,9 +8,9 @@ def validate_comma_list(form, field):
     pattern = re.compile(r'^[a-zA-Z\-]+$')
     for item in items:
         if not (2 <= len(item) <= 20):
-            raise ValidationError(f'"{item}" must be between 2 and 20 characters')
+            raise ValidationError(f'Tag "{item}" must be between 2 and 20 characters')
         if not pattern.fullmatch(item):
-            raise ValidationError(f'"{item}" contains invalid characters')
+            raise ValidationError(f'Tag "{item}" contains invalid characters')
 
 
 class RequestForm(FlaskForm):
