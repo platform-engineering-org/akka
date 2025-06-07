@@ -65,7 +65,8 @@ jobs:
       - name: Apply manifests
         if: github.event_name == 'pull_request'
         run: |
-          kubectl apply -f deployment/kind.yaml
+          kind load docker-image ghcr.io/platform-engineering-org/akka:latest
+          kubectl apply -f deploy/kind.yaml
 
       - name: Scan image for vulnerabilities
         if: github.event_name == 'pull_request_target'
