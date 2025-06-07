@@ -16,8 +16,9 @@ This project contains a sample Akka application, along with configurations for l
 
 1. Build the container image (or pull the pre-built one):
 
-    ```bash
     # To build locally (optional)
+
+    ```bash
     docker build -t ghcr.io/platform-engineering-org/akka:latest .
     ```
 
@@ -50,19 +51,31 @@ This project contains a sample Akka application, along with configurations for l
     kind create cluster
     ```
 
-3. Deploy the application:
+3. Load image
 
     ```bash
-    kubectl apply -f deployment/kind.yml
+    kind load docker-image ghcr.io/platform-engineering-org/akka:latest
     ```
 
-4. Port forwarding
+4. Deploy the application:
+
+    ```bash
+    kubectl apply -f deploy/kind.yaml
+    ```
+
+5. Port forwarding
 
     ```bash
     kubectl port-forward service/akka-app-service 5000:5000
     ```
 
-5. Access the application at `http://127.0.0.1:5000`.
+6. Access the application at `http://127.0.0.1:5000`.
+
+7. Delete cluster
+
+    ```bash
+    kind delete cluster
+    ```
 
 ## AWS ECS Fargate Deployment (via OpenTofu)
 
@@ -88,10 +101,10 @@ This setup deploys the Akka application to AWS ECS Fargate, making it accessible
     - Edit `terraform.tfvars` and replace the placeholder values for `vpc_id` and `subnet_id` with your specific AWS VPC ID and Subnet ID for the `us-east-1` region. The subnet should be a private subnet if you intend to follow the default Fargate configuration without a public IP.
 
 3. **Verify Image in `main.tf`:**
-    The configuration in `deployment/main.tf` should use `image = "ghcr.io/platform-engineering-org/akka:latest"`.
+    The configuration in `deploy/main.tf` should use `image = "ghcr.io/platform-engineering-org/akka:latest"`.
     If you intend to use a different image for the AWS deployment:
     - Build and push your custom Docker image to a container registry (e.g., Amazon ECR, Docker Hub).
-    - Update the `image` value in `aws_ecs_task_definition.akka_app` within `deployment/main.tf` to point to your custom image URI.
+    - Update the `image` value in `aws_ecs_task_definition.akka_app` within `deploy/main.tf` to point to your custom image URI.
 
 4. **Initialize OpenTofu:**
     This downloads the necessary provider plugins.
@@ -149,7 +162,7 @@ tofu destroy
 
 ## OpenShift Deployment
 
-This section outlines deploying the Akka application to an OpenShift cluster using the `deployment/openshift-deployment.yaml` file as a template.
+This section outlines deploying the Akka application to an OpenShift cluster using the `deploy/openshift-deployment.yaml` file as a template.
 
 ### Prerequisites
 
@@ -158,7 +171,7 @@ This section outlines deploying the Akka application to an OpenShift cluster usi
 
 ### Preparing the Deployment File
 
-- The provided `deployment/openshift-deployment.yaml` serves as a starting point. It is pre-configured to use `image: ghcr.io/platform-engineering-org/akka:latest`.
+- The provided `deploy/openshift-deployment.yaml` serves as a starting point. It is pre-configured to use `image: ghcr.io/platform-engineering-org/akka:latest`.
 - Before applying, consider the following customizations for your environment:
   - **Image (If different):** If you use an image other than `ghcr.io/platform-engineering-org/akka:latest`, update `spec.template.spec.containers[0].image` in the Deployment resource.
   - **Route Host (Optional):** If you want a specific hostname for your application, ensure the `spec.host` field in the Route resource is set. If omitted, OpenShift will generate a hostname.
@@ -173,7 +186,7 @@ This section outlines deploying the Akka application to an OpenShift cluster usi
     ```
 
 2. **Target Namespace:**
-    The `deployment/openshift-deployment.yaml` file does not specify a namespace. You must target the desired OpenShift project (namespace) when applying the configuration.
+    The `deploy/openshift-deployment.yaml` file does not specify a namespace. You must target the desired OpenShift project (namespace) when applying the configuration.
     You can either switch to your target project first:
 
     ```bash
@@ -185,13 +198,13 @@ This section outlines deploying the Akka application to an OpenShift cluster usi
     And then apply:
 
     ```bash
-    oc apply -f deployment/openshift-deployment.yaml
+    oc apply -f deploy/openshift-deployment.yaml
     ```
 
     Alternatively, specify the namespace directly with the `apply` command:
 
     ```bash
-    oc apply -f deployment/openshift-deployment.yaml -n <your-target-namespace>
+    oc apply -f deploy/openshift-deployment.yaml -n <your-target-namespace>
     ```
 
 3. **Apply the Deployment Configuration:**
@@ -199,7 +212,7 @@ This section outlines deploying the Akka application to an OpenShift cluster usi
 
 ### Accessing the Service (OpenShift)
 
-- The `deployment/openshift-deployment.yaml` (once applied) creates a `Service` that typically exposes the application internally and a `Route` to make it accessible externally.
+- The `deploy/openshift-deployment.yaml` (once applied) creates a `Service` that typically exposes the application internally and a `Route` to make it accessible externally.
 - The example service maps port 80 to container port 5000. The route, if configured with a host or if one is generated by OpenShift, will provide the external URL.
 - To find the hostname (replace `<your-target-namespace>` with the actual namespace used):
 
@@ -214,7 +227,7 @@ This section outlines deploying the Akka application to an OpenShift cluster usi
 To remove the resources deployed to OpenShift (replace `<your-target-namespace>` with the actual namespace used):
 
 ```bash
-oc delete -f deployment/openshift-deployment.yaml -n <your-target-namespace>
+oc delete -f deploy/openshift-deployment.yaml -n <your-target-namespace>
 # Or delete by label, type, name, etc., ensuring you target the correct namespace.
 # oc delete all -l app=akka-app -n <your-target-namespace> # Example if your resources are labeled
 ```
