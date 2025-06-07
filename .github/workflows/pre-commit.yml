@@ -1,0 +1,25 @@
+name: Pre Commit
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  run-pre-commit:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@4.0.0
+
+      - name: Set up Python
+        uses: actions/setup-python@5.1.1
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        run: pip install -r dev-requirements.txt
+
+      - name: Run pre-commit
+        run: pre-commit run --all-files
