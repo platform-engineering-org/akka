@@ -17,6 +17,7 @@ spec:
       containers:
       - name: akka-app
         image: ghcr.io/platform-engineering-org/akka:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 5000
         resources:
