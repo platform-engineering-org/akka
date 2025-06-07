@@ -1,7 +1,9 @@
+import re
+
 from flask_wtf import FlaskForm
 from wtforms import StringField, ValidationError
-import re
 from wtforms.validators import DataRequired, Length, Regexp
+
 
 def validate_comma_list(form, field):
     items = [item.strip() for item in field.data.split(',')]
