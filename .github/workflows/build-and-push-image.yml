@@ -49,24 +49,6 @@ jobs:
           tags: akka:pr-${{ github.event.pull_request.number }}
           platforms: linux/amd64
 
-      - name: Create Kind cluster
-        if: github.event_name == 'pull_request'
-        uses: helm/kind-action@v1.12.0
-        with:
-          version: v0.26.0
-          wait: 60s
-
-      - name: Show cluster info
-        if: github.event_name == 'pull_request'
-        run: |
-          kubectl cluster-info
-          kubectl get nodes
-
-      - name: Apply manifests
-        if: github.event_name == 'pull_request'
-        run: |
-          kubectl apply -f deployment/kind.yaml
-
       - name: Scan image for vulnerabilities
         if: github.event_name == 'pull_request_target'
         uses: aquasecurity/trivy-action@0.31.0
