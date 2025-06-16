@@ -1,3 +1,16 @@
+"""
+Main Flask application for managing environment configurations and GitLab Runner requests.
+
+Provides routes to:
+- Display a list of environments loaded from a configuration file.
+- Submit requests for GitLab Runners via a web form.
+- Confirm successful submission of runner requests.
+
+Uses Flask-WTF for form handling and validation.
+
+Author: Liora Milbaum
+"""
+
 import configparser
 
 import request
@@ -9,7 +22,12 @@ app.config["WTF_CSRF_ENABLED"] = False
 
 @app.route("/")
 def show_environments():
-    """Show Environments Page"""
+    """
+    Render the environments overview page.
+
+    Reads environment configurations from 'environments.cfg' and
+    passes the list of environments with their details to the template.
+    """
     config = configparser.ConfigParser()
     config.read("environments.cfg")
     environments = []
@@ -22,6 +40,16 @@ def show_environments():
 
 @app.route("/request-runner", methods=["GET", "POST"])
 def request_runner():
+    """
+    Handle the GitLab Runner request form.
+
+    - On GET: Render the request form.
+    - On POST: Validate submitted form data.
+      If valid, process the request and redirect to the success page.
+      Otherwise, re-render the form with errors.
+
+    The form captures environment name, project group, and optional tags.
+    """
     form = request.RequestForm()
     if form.validate_on_submit():
         environment_name = form.environment_name.data
@@ -39,6 +67,7 @@ def request_runner():
 
 @app.route("/success")
 def success():
+    """Display a confirmation message for successful GitLab Runner requests."""
     return "GitLab Runner request submitted successfully!"
 
 
