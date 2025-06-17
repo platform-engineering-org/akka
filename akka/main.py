@@ -13,8 +13,9 @@ Author: Liora Milbaum
 
 import configparser
 
-import request
 from flask import Flask, redirect, render_template, url_for
+
+import request
 
 app = Flask(__name__)
 app.config["WTF_CSRF_ENABLED"] = False

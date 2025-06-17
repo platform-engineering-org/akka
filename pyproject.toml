@@ -1,3 +1,6 @@
+[tool.ruff]
+src = ["akka"]
+
 [tool.ruff.lint]
-select = ["D"]
+select = ["D", "I"]
 ignore = ["D203", "D212"]
