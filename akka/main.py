@@ -13,11 +13,11 @@ Author: Liora Milbaum
 
 import configparser
 
-from flask import Flask, redirect, render_template, url_for
+import flask
 
-import request
+import forms
 
-app = Flask(__name__)
+app = flask.Flask(__name__)
 app.config["WTF_CSRF_ENABLED"] = False
 
 
@@ -36,7 +36,7 @@ def show_environments():
         env = {"name": section}
         env.update(config[section])
         environments.append(env)
-    return render_template("environments.html", environments=environments)
+    return flask.render_template("environments.html", environments=environments)
 
 
 @app.route("/request-runner", methods=["GET", "POST"])
@@ -51,7 +51,7 @@ def request_runner():
 
     The form captures environment name, project group, and optional tags.
     """
-    form = request.RequestForm()
+    form = forms.RequestForm()
     if form.validate_on_submit():
         environment_name = form.environment_name.data
         project_group = form.project_group.data
@@ -61,9 +61,9 @@ def request_runner():
             f"Requested GitLab Runner - Environment: {environment_name}, Group: {project_group}, Tags: {tags}"
         )
 
-        return redirect(url_for("success"))
+        return flask.redirect(flask.url_for("success"))
 
-    return render_template("request_runner.html", form=form)
+    return flask.render_template("request_runner.html", form=form)
 
 
 @app.route("/success")
