@@ -5,20 +5,19 @@ The module includes:
 - `RequestForm`: A form class with fields for environment name, project group, and tags.
 - `validate_comma_list`: Custom validator for comma-separated tag lists ensuring proper format.
 
-Form field validations enforce naming conventions and character restrictions to maintain data consistency
-for environment provisioning workflows.
+Form field validations enforce naming conventions and character restrictions to
+maintain data consistency for environment provisioning workflows.
 
 Author: Liora Milbaum
 """
 
 import re
 
-from flask_wtf import FlaskForm
-from wtforms import StringField, ValidationError
-from wtforms.validators import DataRequired, Length, Regexp
+import flask_wtf
+import wtforms
 
 
-def validate_comma_list(form, field):
+def validate_comma_list(field):
     """
     Validate a comma-separated list of tags.
 
@@ -36,12 +35,14 @@ def validate_comma_list(form, field):
     pattern = re.compile(r"^[a-zA-Z\-]+$")
     for item in items:
         if not (2 <= len(item) <= 20):
-            raise ValidationError(f'Tag "{item}" must be between 2 and 20 characters')
+            raise wtforms.ValidationError(
+                f'Tag "{item}" must be between 2 and 20 characters'
+            )
         if not pattern.fullmatch(item):
-            raise ValidationError(f'Tag "{item}" contains invalid characters')
+            raise wtforms.ValidationError(f'Tag "{item}" contains invalid characters')
 
 
-class RequestForm(FlaskForm):
+class RequestForm(flask_wtf.FlaskForm):
     """
     Form for submitting environment provisioning requests.
 
@@ -61,26 +62,26 @@ class RequestForm(FlaskForm):
             - Validated using a custom `validate_comma_list` validator
     """
 
-    environment_name = StringField(
+    environment_name = wtforms.StringField(
         "Environment Name",
         validators=[
-            DataRequired(),
-            Length(min=2, max=20),
-            Regexp(
+            wtforms.validators.DataRequired(),
+            wtforms.validators.Length(min=2, max=20),
+            wtforms.validators.Regexp(
                 r"^[a-zA-Z0-9\-]+$",
                 message="Only letters, numbers and dashes are allowed",
             ),
         ],
     )
-    project_group = StringField(
+    project_group = wtforms.StringField(
         "Project Group",
         validators=[
-            DataRequired(),
-            Length(min=2, max=50),
-            Regexp(
+            wtforms.validators.DataRequired(),
+            wtforms.validators.Length(min=2, max=50),
+            wtforms.validators.Regexp(
                 r"^[a-zA-Z0-9\-]+(\/[a-zA-Z0-9\-]+)*$",
                 message="Project group must contain only letters, numbers, dashes, and slashes (no // or trailing slash)",
             ),
         ],
     )
-    tags = StringField("Tags", validators=[validate_comma_list])
+    tags = wtforms.StringField("Tags", validators=[validate_comma_list])
