@@ -34,9 +34,9 @@ jobs:
         if: github.event_name == 'pull_request' || github.event_name == 'push'
         uses: docker/build-push-action@6.18.0
         with:
-          context: .
+          context: manager
           push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && github.repository == 'platform-engineering-org/akka' }}
-          tags: ghcr.io/${{ github.repository_owner }}/akka:latest
+          tags: ghcr.io/${{ github.repository_owner }}/akka-manager:latest
           platforms: linux/amd64,linux/arm64/v8
 
       - name: Build for scanning
@@ -46,14 +46,14 @@ jobs:
           context: .
           load: true
           push: false
-          tags: akka:pr-${{ github.event.pull_request.number }}
+          tags: akka-manager:pr-${{ github.event.pull_request.number }}
           platforms: linux/amd64
 
       - name: Scan image for vulnerabilities
         if: github.event_name == 'pull_request_target'
         uses: aquasecurity/trivy-action@0.31.0
         with:
-          image-ref: akka:pr-${{ github.event.pull_request.number }}
+          image-ref: akka-manager:pr-${{ github.event.pull_request.number }}
           format: table
           output: trivy-results.txt
           exit-code: 0
@@ -75,7 +75,7 @@ jobs:
         with:
           issue-number: ${{ github.event.pull_request.number }}
           comment-author: 'github-actions[bot]'
-          body-includes: '### 🔒 Trivy Scan Results for `akka:pr-${{ github.event.pull_request.number }}`'
+          body-includes: '### 🔒 Trivy Scan Results for `akka-manager:pr-${{ github.event.pull_request.number }}`'
 
       - name: Post Trivy scan result as PR comment
         if: github.event_name == 'pull_request_target'
@@ -85,7 +85,7 @@ jobs:
           comment-id: ${{ steps.get-comment.outputs.comment-id }}
           edit-mode: replace
           body: |
-            ### 🔒 Trivy Scan Results for `akka:pr-${{ github.event.pull_request.number }}`
+            ### 🔒 Trivy Scan Results for `akka-manager:pr-${{ github.event.pull_request.number }}`
             ```
             ${{ steps.read-scan.outputs.scan_output }}
             ```

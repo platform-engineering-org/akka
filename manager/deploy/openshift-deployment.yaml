@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: akka-app
-        image: ghcr.io/platform-engineering-org/akka:latest
+        image: ghcr.io/platform-engineering-org/akka-manager:latest
         ports:
         - containerPort: 5000
         resources:
