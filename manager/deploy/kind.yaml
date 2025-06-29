@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: akka-app
+  name: manager
   labels:
-    app: akka-app
+    app: manager
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: akka-app
+      app: manager
   template:
     metadata:
       labels:
-        app: akka-app
+        app: manager
     spec:
       containers:
-      - name: akka-app
-        image: ghcr.io/platform-engineering-org/akka:latest
+      - name: manager
+        image: ghcr.io/platform-engineering-org/manager:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 5000
@@ -31,10 +31,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: akka-app-service
+  name: manager
 spec:
   selector:
-    app: akka-app
+    app: manager
   ports:
   - port: 5000
     targetPort: 5000
