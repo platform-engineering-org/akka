@@ -1,9 +1,7 @@
-.PHONY: build up down clean
+.PHONY: clean up down
 
-build:
+up:
 	docker build -t ghcr.io/platform-engineering-org/akka-manager:latest -f manager/Dockerfile .
-
-up: build
 	kind create cluster
 	kind load docker-image ghcr.io/platform-engineering-org/akka-manager:latest
 	kubectl apply -f manager/deploy/manager.yaml
