@@ -12,3 +12,4 @@ RUN pip install -r manager/requirements.txt
 EXPOSE 5000
 
 CMD ["python", "-m", "manager.main"]
+

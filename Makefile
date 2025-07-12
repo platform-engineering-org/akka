@@ -10,3 +10,4 @@ up:
 
 down:
 	kind delete cluster
+
