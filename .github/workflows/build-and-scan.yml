@@ -27,7 +27,11 @@ jobs:
           platforms: linux/amd64
 
       - name: Scan image for vulnerabilities
+<<<<<<< HEAD
+        uses: aquasecurity/trivy-action@0.32.0
+=======
         uses: aquasecurity/trivy-action@0.31.0
+>>>>>>> f1843cd (Rename pre-commit workflow to ci (#68))
         with:
           image-ref: akka-manager:pr-${{ github.event.pull_request.number }}
           format: table
