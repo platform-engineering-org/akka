@@ -17,7 +17,7 @@ import flask_wtf
 import wtforms
 
 
-def validate_comma_list(field):
+def validate_comma_list(key, value):
     """
     Validate a comma-separated list of tags.
 
@@ -31,8 +31,8 @@ def validate_comma_list(field):
         ValidationError: If any tag is too short/long or contains invalid characters.
 
     """
-    items = [item.strip() for item in field.data.split(",")]
-    pattern = re.compile(r"^[a-zA-Z\-]+$")
+    items = [item.strip() for item in value.data.split(",")]
+    pattern = re.compile(r"^[a-zA-Z0-9\-]+$")
     for item in items:
         if not (2 <= len(item) <= 20):
             raise wtforms.ValidationError(
@@ -62,8 +62,8 @@ class RequestForm(flask_wtf.FlaskForm):
             - Validated using a custom `validate_comma_list` validator
     """
 
-    environment_name = wtforms.StringField(
-        "Environment Name",
+    name = wtforms.StringField(
+        "Name",
         validators=[
             wtforms.validators.DataRequired(),
             wtforms.validators.Length(min=2, max=20),
@@ -73,14 +73,14 @@ class RequestForm(flask_wtf.FlaskForm):
             ),
         ],
     )
-    project_group = wtforms.StringField(
-        "Project Group",
+    gitlab_group_id = wtforms.StringField(
+        "Gitlab Group ID",
         validators=[
             wtforms.validators.DataRequired(),
             wtforms.validators.Length(min=2, max=50),
             wtforms.validators.Regexp(
                 r"^[a-zA-Z0-9\-]+(\/[a-zA-Z0-9\-]+)*$",
-                message="Project group must contain only letters, numbers, dashes, and slashes (no // or trailing slash)",
+                message="Gitlab group id must contain only letters, numbers, dashes, and slashes (no // or trailing slash)",
             ),
         ],
     )

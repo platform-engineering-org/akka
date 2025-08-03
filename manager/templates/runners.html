@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Environments</title>
+    <title>Runners</title>
     <style>
         table {
             border-collapse: collapse;
@@ -17,18 +17,18 @@
     </style>
 </head>
 <body>
-    <h2>Environments</h2>
+    <h2>Runners</h2>
     <table>
         <tr>
-            <th>Environment</th>
-            <th>GITLAB_GROUP_ID</th>
-            <th>TAGS_LIST</th>
+            <th>Name</th>
+            <th>GitLab Group ID</th>
+            <th>Tags</th>
         </tr>
-        {% for env in environments %}
+        {% for runner in runners %}
         <tr>
-            <td>{{ env.name }}</td>
-            <td>{{ env.gitlab_group_id }}</td>
-            <td>{{ env.tags_list }}</td>
+            <td>{{ runner.name }}</td>
+            <td>{{ runner.gitlab_group_id }}</td>
+            <td>{{ runner.tags }}</td>
         </tr>
         {% endfor %}
     </table>
