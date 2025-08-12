@@ -8,22 +8,22 @@
     <form method="POST">
         {{ form.hidden_tag() }}
         <div>
-            {{ form.environment_name.label }}<br>
-            {{ form.environment_name(size=32) }}
-            {% if form.environment_name.errors %}
+            {{ form.name.label }}<br>
+            {{ form.name(size=32) }}
+            {% if form.name.errors %}
                 <ul class="errors">
-                    {% for error in form.environment_name.errors %}
+                    {% for error in form.name.errors %}
                         <li style="color: red;">{{ error }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}
         </div>
         <div>
-            {{ form.project_group.label }}<br>
-            {{ form.project_group(size=32) }}
-            {% if form.project_group.errors %}
+            {{ form.gitlab_group_id.label }}<br>
+            {{ form.gitlab_group_id(size=32) }}
+            {% if form.gitlab_group_id.errors %}
                 <ul class="errors">
-                    {% for error in form.project_group.errors %}
+                    {% for error in form.gitlab_group_id.errors %}
                         <li style="color: red;">{{ error }}</li>
                     {% endfor %}
                 </ul>

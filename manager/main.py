@@ -1,76 +1,40 @@
 """
 Main Flask application for managing environment configurations and GitLab Runner requests.
 
-Provides routes to:
-- Display a list of environments loaded from a configuration file.
-- Submit requests for GitLab Runners via a web form.
-- Confirm successful submission of runner requests.
-
 Uses Flask-WTF for form handling and validation.
 
 Author: Liora Milbaum
 """
 
-import configparser
-
 import flask
 
-from manager import forms
-
-app = flask.Flask(__name__)
-app.config["WTF_CSRF_ENABLED"] = False
+from manager import config, database, routes
 
 
-@app.route("/")
-def show_environments():
-    """
-    Render the environments overview page.
+def create_app(test_config=None):
+    """Create and configure the Flask application."""
+    app = flask.Flask(__name__)
 
-    Reads environment configurations from 'environments.cfg' and
-    passes the list of environments with their details to the template.
-    """
-    config = configparser.ConfigParser()
-    config.read("manager/environments.cfg")
-    environments = []
-    for section in config.sections():
-        env = {"name": section}
-        env.update(config[section])
-        environments.append(env)
-    return flask.render_template("environments.html", environments=environments)
+    if test_config is None:
+        app.config.from_object(config.Config)
+    else:
+        app.config.from_object(test_config)
 
+    database.db.init_app(app)
 
-@app.route("/request-runner", methods=["GET", "POST"])
-def request_runner():
-    """
-    Handle the GitLab Runner request form.
+    @app.route("/")
+    def home():
+        """Non-blueprint home route."""
+        return flask.jsonify(message="Welcome to the Akka app!")
 
-    - On GET: Render the request form.
-    - On POST: Validate submitted form data.
-      If valid, process the request and redirect to the success page.
-      Otherwise, re-render the form with errors.
+    app.register_blueprint(routes.bp)
 
-    The form captures environment name, project group, and optional tags.
-    """
-    form = forms.RequestForm()
-    if form.validate_on_submit():
-        environment_name = form.environment_name.data
-        project_group = form.project_group.data
-        tags = form.tags.data
+    with app.app_context():
+        database.db.create_all()
 
-        print(
-            f"Requested GitLab Runner - Environment: {environment_name}, Group: {project_group}, Tags: {tags}"
-        )
-
-        return flask.redirect(flask.url_for("success"))
-
-    return flask.render_template("request_runner.html", form=form)
-
-
-@app.route("/success")
-def success():
-    """Display a confirmation message for successful GitLab Runner requests."""
-    return "GitLab Runner request submitted successfully!"
+    return app
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5000)
+    app = create_app()
+    app.run(host="0.0.0.0", port=5000, debug=True)
