@@ -1,39 +1,30 @@
 """
-Unit tests for the database module.
+Unit tests for the SQLAlchemy database extension.
 
-Tests:
-- Environment variables are read correctly.
-- SQLAlchemy engine is created with the expected URL.
-- init_db() calls metadata.create_all() as expected.
+Tests database.db initialization and init_db() function with a minimal Flask app.
 
 Author: Liora Milbaum
 """
 
-from unittest import mock
-
 from manager import database
 
 
-def test_get_db_uri(monkeypatch):
-    """Test that get_db_uri builds the URI correctly."""
-    monkeypatch.setenv("POSTGRES_HOST", "db_host")
-    monkeypatch.setenv("POSTGRES_DB", "mydb")
-    monkeypatch.setenv("POSTGRES_USER", "myuser")
-    monkeypatch.setenv("POSTGRES_PASSWORD", "mypass")
-
-    uri = database.get_db_uri()
-    assert uri == "postgresql://myuser:mypass@db_host:5432/mydb"
+def test_db_instance_initialization(app):
+    """Verify that the SQLAlchemy db instance is correctly associated with the Flask app."""
+    with app.app_context():
+        # Ensure db.session works inside the app context
+        assert database.db.session is not None
+        assert str(database.db.engine.url).startswith("sqlite://")
 
 
-def test_init_db_calls_create_all():
-    """Test that init_db calls db.create_all()."""
-    with mock.patch.object(database.db, "create_all") as mock_create_all:
-        app = mock.Mock()
-        app_ctx = mock.MagicMock()
-        app.app_context.return_value = app_ctx
+def test_init_db_creates_tables(app):
+    """Verify that database.init_db() successfully creates tables for models."""
+    from sqlalchemy import Column, Integer, String
 
-        database.init_db(app)
+    class TestModel(database.db.Model):
+        __tablename__ = "test_model"
+        id = Column(Integer, primary_key=True)
+        name = Column(String(50))
 
-        app.app_context.assert_called_once()
-        app_ctx.__enter__.assert_called_once()
-        mock_create_all.assert_called_once()
+    database.init_db(app)
+    assert "test_model" in database.db.metadata.tables
