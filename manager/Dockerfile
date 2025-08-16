@@ -5,6 +5,7 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+COPY db/ ./db/
 COPY manager/ ./manager/
 
 RUN pip install -r manager/requirements.txt
