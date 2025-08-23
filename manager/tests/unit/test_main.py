@@ -52,10 +52,14 @@ def test_create_app_with_test_config():
 
 
 def test_home_route(client):
-    """GET / should return welcome JSON."""
+    """GET / should return the home page HTML."""
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json["message"] == "Welcome to the Akka app!"
+    html = response.get_data(as_text=True)
+    assert "Welcome to the Akka App" in html
+    assert 'href="' in html
+    assert "Request a Runner" in html
+    assert "View Runners" in html
 
 
 def test_request_endpoint_exists(app):
