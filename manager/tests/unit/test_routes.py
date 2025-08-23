@@ -47,3 +47,13 @@ def test_request_runner_json_success(client, app):
 def test_request_runner_json_bad_payload(client):
     """POST /runners/request with bad JSON returns 400."""
     payload = {"name": "incomplete"}
+
+
+def test_success_page(client):
+    """GET /runners/request should render the success template with buttons."""
+    response = client.get("/runners/success")
+    assert response.status_code == 200
+    html = response.get_data(as_text=True)
+    assert "Gitlab Runner was successfully requested" in html
+    assert "View Runners" in html
+    assert "Request Another Runner" in html

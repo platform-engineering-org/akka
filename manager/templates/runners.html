@@ -1,36 +1,103 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
     <title>Runners</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px auto;
+            max-width: 800px;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #222;
+        }
+
         table {
             border-collapse: collapse;
-            width: 60%;
+            width: 100%;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
         }
+
         th, td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 12px 15px;
+            text-align: left;
         }
+
         th {
-            background-color: #f2f2f2;
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        tr:nth-child(even) {
+            background-color: #fafafa;
+        }
+
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        @media (max-width: 600px) {
+            table, th, td {
+                display: block;
+                width: 100%;
+            }
+
+            tr {
+                margin-bottom: 15px;
+                display: block;
+                border-bottom: 2px solid #ddd;
+            }
+
+            th {
+                text-align: left;
+                background-color: transparent;
+                font-weight: bold;
+                padding-top: 10px;
+            }
+
+            td {
+                padding-left: 50%;
+                position: relative;
+            }
+
+            td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 15px;
+                font-weight: bold;
+            }
         }
     </style>
 </head>
 <body>
     <h2>Runners</h2>
     <table>
-        <tr>
-            <th>Name</th>
-            <th>GitLab Group ID</th>
-            <th>Tags</th>
-        </tr>
-        {% for runner in runners %}
-        <tr>
-            <td>{{ runner.name }}</td>
-            <td>{{ runner.gitlab_group_id }}</td>
-            <td>{{ runner.tags }}</td>
-        </tr>
-        {% endfor %}
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>GitLab Group ID</th>
+                <th>Tags</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for runner in runners %}
+            <tr>
+                <td data-label="Name">{{ runner.name }}</td>
+                <td data-label="GitLab Group ID">{{ runner.gitlab_group_id }}</td>
+                <td data-label="Tags">{{ runner.tags }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3" style="text-align:center; color:#777;">No runners found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </body>
 </html>
