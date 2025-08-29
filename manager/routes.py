@@ -64,10 +64,10 @@ def request_runner():
             database.db.session.commit()
             return flask.redirect(flask.url_for("runners.success"))
 
-    return flask.render_template("request_form.html", form=form)
+    return flask.render_template("request_runner.html", form=form)
 
 
-@bp.route("/success")
+@bp.route("/success", methods=["GET"])
 def success():
-    """Display a confirmation message for successful GitLab Runner requests."""
-    return "GitLab Runner request submitted successfully!"
+    """Success page."""
+    return flask.render_template("success.html")

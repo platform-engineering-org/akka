@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Akka App</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: system-ui, sans-serif;
+            background-color: #f9fafb;
+            color: #111;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            width: 100%;
+            max-width: 480px;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 1.75rem;
+            margin-bottom: 1rem;
+        }
+
+        p {
+            font-size: 1rem;
+            color: #374151;
+            margin-bottom: 2rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #2563eb;
+            color: #fff;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            margin: 0.5rem;
+            transition: background-color 0.2s;
+        }
+
+        .btn:hover {
+            background-color: #1e40af;
+        }
+
+        .btn-secondary {
+            background-color: #10b981;
+        }
+
+        .btn-secondary:hover {
+            background-color: #059669;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>👋 Welcome to the Akka App</h1>
+        <p>Manage and explore GitLab Runners with ease.</p>
+        <a href="{{ url_for('runners.request_runner') }}" class="btn">Request a Runner</a>
+        <a href="{{ url_for('runners.list_runners') }}" class="btn btn-secondary">View Runners</a>
+</body>
+</html>
